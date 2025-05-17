@@ -1,13 +1,8 @@
-﻿using Entities;
-using ServiceContracts.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using ContactsManagement.Core.Domain.Entities;
+using ContactsManagement.Core.Enums;
 
-namespace ServiceContracts.DTO
+namespace ContactsManagement.Core.DTO
 {
     public class PersonAddRequest
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDMVC.Filters.ResultFilters.Persons;
+namespace ContactsManagement.UI.Filters.ResultFilters.Persons;
 
 public class PersonsIndexAlwaysRunResultFilter : IAsyncAlwaysRunResultFilter
 {

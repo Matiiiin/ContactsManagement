@@ -1,10 +1,9 @@
-﻿using ServiceContracts.DTO;
+﻿using ContactsManagement.Core.DTO;
 
-namespace ServiceContracts.Countries
+namespace ContactsManagement.Core.ServiceContracts.Countries;
+
+public interface ICountriesGetterService
 {
-    public interface ICountriesGetterService
-    {
-        Task<List<CountryResponse>> GetAllCountries();
-        Task<CountryResponse?> GetCountryByCountryID(Guid? countryID);
-    }
+    Task<List<CountryResponse>> GetAllCountries();
+    Task<CountryResponse?> GetCountryByCountryID(Guid? countryID);
 }

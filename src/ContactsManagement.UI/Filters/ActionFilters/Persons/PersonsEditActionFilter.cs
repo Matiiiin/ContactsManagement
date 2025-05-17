@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactsManagement.Core.ServiceContracts.Persons;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ServiceContracts;
-using ServiceContracts.Persons;
 
-namespace CRUDMVC.Filters.ActionFilters.Persons;
+namespace ContactsManagement.UI.Filters.ActionFilters.Persons;
 
 public class PersonsEditActionFilter : ActionFilterAttribute
 {

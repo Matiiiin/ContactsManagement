@@ -1,23 +1,13 @@
-﻿using ServiceContracts.DTO;
-using Services;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture;
-using Entities;
-using EntityFrameworkCoreMock;
-using Microsoft.EntityFrameworkCore;
-using ServiceContracts;
-using Moq;
+﻿using AutoFixture;
+using ContactsManagement.Core.Domain.Entities;
+using ContactsManagement.Core.Domain.RepositoryContracts;
+using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.ServiceContracts.Countries;
+using ContactsManagement.Core.Services.Countries;
 using FluentAssertions;
-using RepositoryContracts;
-using ServiceContracts.Countries;
-using Services.Countries;
+using Moq;
 
-namespace CRUDTests.CountryTests
+namespace ContactsManagement.ServiceTests.CountriesService
 {
     public class CountriesServiceTest
     {

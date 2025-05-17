@@ -1,10 +1,8 @@
-﻿using Entities;
-using Microsoft.EntityFrameworkCore;
-using RepositoryContracts;
-using ServiceContracts;
-using ServiceContracts.Countries;
-using ServiceContracts.DTO;
-namespace Services.Countries
+﻿using ContactsManagement.Core.Domain.RepositoryContracts;
+using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.ServiceContracts.Countries;
+
+namespace ContactsManagement.Core.Services.Countries
 {
     public class CountriesAdderService(ICountriesRepository _countriesRepository) :ICountriesAdderService
     {

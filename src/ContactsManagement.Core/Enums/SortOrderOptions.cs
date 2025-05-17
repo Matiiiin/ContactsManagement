@@ -1,4 +1,4 @@
-﻿namespace ServiceContracts.Enums;
+﻿namespace ContactsManagement.Core.Enums;
 
 public enum SortOrderOptions
 {

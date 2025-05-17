@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactsManagement.Core.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ServiceContracts.DTO;
 
-namespace CRUDMVC.Filters.ActionFilters.Persons;
+namespace ContactsManagement.UI.Filters.ActionFilters.Persons;
 
 public class PersonsStoreActionFilter : ActionFilterAttribute
 {

@@ -1,20 +1,10 @@
-﻿using Entities;
-using ServiceContracts;
-using ServiceContracts.DTO;
-using Services.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using ContactsManagement.Core.Domain.RepositoryContracts;
+using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.ServiceContracts.Persons;
 using Microsoft.IdentityModel.Tokens;
-using RepositoryContracts;
 using Serilog;
-using ServiceContracts.Enums;
-using ServiceContracts.Persons;
 
-namespace Services.Persons
+namespace ContactsManagement.Core.Services.Persons
 {
     public class PersonsGetterService(IPersonsRepository _personsRepository , IDiagnosticContext _diagnosticContext) : IPersonsGetterService
     {

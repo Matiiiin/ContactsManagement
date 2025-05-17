@@ -1,28 +1,17 @@
-﻿using Entities;
-using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
-using ServiceContracts.DTO;
-using Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using AutoFixture;
-using EntityFrameworkCoreMock;
+using ContactsManagement.Core.Domain.Entities;
+using ContactsManagement.Core.Domain.RepositoryContracts;
+using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.Enums;
+using ContactsManagement.Core.ServiceContracts.Persons;
+using ContactsManagement.Core.Services.Persons;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using ServiceContracts;
-using ServiceContracts.Enums;
-using Xunit.Abstractions;
 using Moq;
-using RepositoryContracts;
 using Serilog.Extensions.Hosting;
-using ServiceContracts.Persons;
-using Services.Persons;
+using Xunit.Abstractions;
 
-namespace CRUDTests.PersonTests
+namespace ContactsManagement.ServiceTests.PersonsService
 {
     public class PersonsServiceTest
     {

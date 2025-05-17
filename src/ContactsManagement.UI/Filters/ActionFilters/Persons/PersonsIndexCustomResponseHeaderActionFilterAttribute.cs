@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDMVC.Filters.ActionFilters.Persons;
+namespace ContactsManagement.UI.Filters.ActionFilters.Persons;
 
 public class PersonsIndexCustomResponseHeaderActionFilterAttribute : Attribute , IFilterFactory
 {

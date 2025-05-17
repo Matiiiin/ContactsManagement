@@ -1,6 +1,6 @@
-﻿using Entities;
+﻿using ContactsManagement.Core.Domain.Entities;
 
-namespace RepositoryContracts;
+namespace ContactsManagement.Core.Domain.RepositoryContracts;
 
 public interface ICountriesRepository
 {

@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDMVC.Filters.AuthorizationFilters;
+namespace ContactsManagement.UI.Filters.AuthorizationFilters;
 
 public class AuthTokenCheckAuthorizationFilter : IAsyncAuthorizationFilter
 {

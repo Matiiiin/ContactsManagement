@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entities;
+﻿using ContactsManagement.Core.Domain.Entities;
 
-namespace ServiceContracts.DTO
+namespace ContactsManagement.Core.DTO
 {
     public class CountryAddRequest
     {

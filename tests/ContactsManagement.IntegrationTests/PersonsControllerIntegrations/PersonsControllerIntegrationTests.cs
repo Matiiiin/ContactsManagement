@@ -1,19 +1,12 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.ServiceContracts.Persons;
+using FluentAssertions;
 using HtmlAgilityPack;
-using Xunit.Abstractions;
-using Xunit.Sdk;
-using System.Net.Http;
-using System.Net.Http.Json;
-using AutoFixture;
-using Entities;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceContracts;
-using ServiceContracts.DTO;
-using ServiceContracts.Enums;
-using ServiceContracts.Persons;
-using Services;
+using Xunit.Abstractions;
 
-namespace CRUDTests.PersonTests;
+namespace ContactsManagement.IntegrationTests.PersonsControllerIntegrations;
 
 public class PersonsControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory>
 {

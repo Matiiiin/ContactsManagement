@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities
+namespace ContactsManagement.Core.Domain.Entities
 {
     public class Country
     {
