@@ -1,0 +1,41 @@
+﻿services:
+  contacts-management:
+#    container_name: contacts-management
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - MSSQL_SERVER=sql-server
+      - MSSQL_PORT=1433
+      - MSSQL_DATABASE=master
+      - MSSQL_USER=sa
+      - MSSQL_PASSWORD=P@ssw0rd!2023
+    restart: on-failure
+    depends_on:
+      - sql-server
+        
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: sql-server
+    ports:
+      - "1434:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=P@ssw0rd!2023
+    volumes:
+      - ./sqlserver/data:/var/opt/mssql/data
+      - ./sqlserver/log:/var/opt/mssql/log
+      - ./sqlserver/secrets:/var/opt/mssql/secrets
+  
+  seq:
+    image: datalust/seq
+    container_name: seq
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - ./seq:/data
