@@ -1,15 +1,13 @@
-﻿using CRUDMVC.Controllers;
-using Entities;
+﻿using ContactsManagement.Core.Domain.Entities;
+using ContactsManagement.Core.ServiceContracts.Persons;
+using ContactsManagement.Core.Services.Persons;
+using ContactsManagement.Infrastructure.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceContracts;
-using ServiceContracts.Persons;
-using Services;
-using Services.Persons;
 
-namespace CRUDTests;
+namespace ContactsManagement.IntegrationTests;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {

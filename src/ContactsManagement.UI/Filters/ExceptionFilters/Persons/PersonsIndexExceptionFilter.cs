@@ -1,8 +1,7 @@
-﻿using CRUDMVC.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDMVC.Filters.ExceptionFilters.Persons;
+namespace ContactsManagement.UI.Filters.ExceptionFilters.Persons;
 
 public class PersonsIndexExceptionFilter : ExceptionFilterAttribute
 {

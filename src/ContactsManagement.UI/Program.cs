@@ -1,4 +1,4 @@
-using CRUDMVC.StartupExtensions;
+using ContactsManagement.UI.StartupExtensions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

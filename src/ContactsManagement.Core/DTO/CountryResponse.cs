@@ -1,11 +1,6 @@
-﻿using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ContactsManagement.Core.Domain.Entities;
 
-namespace ServiceContracts.DTO
+namespace ContactsManagement.Core.DTO
 {
     public class CountryResponse
     {

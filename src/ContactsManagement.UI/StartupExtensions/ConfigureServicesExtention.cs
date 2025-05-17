@@ -1,20 +1,17 @@
-﻿using CRUDMVC.Filters.ActionFilters.Persons;
-using CRUDMVC.Filters.GlobalFilters;
-using CRUDMVC.Middlewares;
-using Entities;
+﻿using ContactsManagement.Core.Domain.RepositoryContracts;
+using ContactsManagement.Core.ServiceContracts.Countries;
+using ContactsManagement.Core.ServiceContracts.Persons;
+using ContactsManagement.Core.Services.Countries;
+using ContactsManagement.Core.Services.Persons;
+using ContactsManagement.Infrastructure.Database;
+using ContactsManagement.Infrastructure.Repositories;
+using ContactsManagement.UI.Filters.ActionFilters.Persons;
+using ContactsManagement.UI.Filters.GlobalFilters;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
-using Repositories;
-using RepositoryContracts;
-using ServiceContracts;
-using ServiceContracts.Countries;
-using ServiceContracts.Persons;
-using Services;
-using Services.Countries;
-using Services.Persons;
 
-namespace CRUDMVC.StartupExtensions;
+namespace ContactsManagement.UI.StartupExtensions;
 
 public static class ConfigureServicesExtention
 {

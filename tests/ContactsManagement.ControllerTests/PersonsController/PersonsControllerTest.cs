@@ -1,17 +1,15 @@
 ﻿using AutoFixture;
-using CRUDMVC.Controllers;
-using Entities;
+using ContactsManagement.Core.Domain.Entities;
+using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.Enums;
+using ContactsManagement.Core.ServiceContracts.Countries;
+using ContactsManagement.Core.ServiceContracts.Persons;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Moq;
-using ServiceContracts;
-using ServiceContracts.Countries;
-using ServiceContracts.DTO;
-using ServiceContracts.Enums;
-using ServiceContracts.Persons;
 
-namespace CRUDTests.PersonTests;
+namespace ContactsManagement.ControllerTests.PersonsController;
 
 public class PersonsControllerTest
 {
@@ -23,7 +21,7 @@ public class PersonsControllerTest
     
     private readonly Mock<ICountriesAdderService> _countriesAdderServiceMock;
     private readonly Mock<ICountriesGetterService> _countriesGetterServiceMock;
-    private readonly PersonsController _personsController;
+    private readonly UI.Controllers.PersonsController _personsController;
     private readonly IFixture _fixture;
 
     public PersonsControllerTest()
@@ -37,7 +35,7 @@ public class PersonsControllerTest
         _personsSorterServiceMock = new Mock<IPersonsSorterService>();
         _personsUpdaterServiceMock = new Mock<IPersonsUpdaterService>();
         _personsDeleterServiceMock = new Mock<IPersonsDeleterService>();
-        _personsController = new PersonsController(
+        _personsController = new UI.Controllers.PersonsController(
             _personsGetterServiceMock.Object ,
             _personsAdderServiceMock.Object ,
             _personsSorterServiceMock.Object ,

@@ -1,22 +1,15 @@
-﻿using CRUDMVC.Filters.ActionFilters.Persons;
-using CRUDMVC.Filters.AuthorizationFilters;
-using CRUDMVC.Filters.ExceptionFilters.Persons;
-using CRUDMVC.Filters.ResultFilters.Persons;
-using Entities;
-using Microsoft.AspNetCore.Authorization;
+﻿using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.Enums;
+using ContactsManagement.Core.ServiceContracts.Countries;
+using ContactsManagement.Core.ServiceContracts.Persons;
+using ContactsManagement.UI.Filters.ActionFilters.Persons;
+using ContactsManagement.UI.Filters.ExceptionFilters.Persons;
+using ContactsManagement.UI.Filters.ResultFilters.Persons;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using ServiceContracts;
-using ServiceContracts.Countries;
-using ServiceContracts.DTO;
-using ServiceContracts.Enums;
-using ServiceContracts.Persons;
 
-namespace CRUDMVC.Controllers;
+namespace ContactsManagement.UI.Controllers;
 
 [Route("[controller]")]
 public class PersonsController(IPersonsGetterService personsGetterService , IPersonsAdderService personsAdderService, IPersonsSorterService personsSorterService, IPersonsDeleterService personsDeleterService, IPersonsUpdaterService personsUpdaterService, ICountriesAdderService countriesAdderService ,ICountriesGetterService countriesGetterService)  : Controller

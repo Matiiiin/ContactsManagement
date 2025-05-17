@@ -1,8 +1,8 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using ContactsManagement.Core.Domain.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Entities;
+namespace ContactsManagement.Infrastructure.Database;
 
 public class ApplicationDbContext : DbContext
 {

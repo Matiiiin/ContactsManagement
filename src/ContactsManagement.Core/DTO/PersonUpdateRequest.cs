@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Entities;
-using ServiceContracts.Enums;
+using ContactsManagement.Core.Domain.Entities;
+using ContactsManagement.Core.Enums;
 
-
-namespace ServiceContracts.DTO;
+namespace ContactsManagement.Core.DTO;
 
 public class PersonUpdateRequest
 {

@@ -1,8 +1,8 @@
-﻿using CRUDMVC.Controllers;
+﻿using ContactsManagement.Core.DTO;
+using ContactsManagement.UI.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ServiceContracts.DTO;
 
-namespace CRUDMVC.Filters.ActionFilters.Persons;
+namespace ContactsManagement.UI.Filters.ActionFilters.Persons;
 
 public class PersonsIndexActionFilter : ActionFilterAttribute
 {

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-
-namespace CRUDMVC.Middlewares;
+﻿namespace ContactsManagement.UI.Middlewares;
 
 public class CustomExceptionHandlingMiddleware
 {

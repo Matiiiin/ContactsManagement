@@ -1,12 +1,6 @@
-﻿using ServiceContracts.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ServiceContracts.Enums;
+﻿using ContactsManagement.Core.DTO;
 
-namespace ServiceContracts.Persons
+namespace ContactsManagement.Core.ServiceContracts.Persons
 {
     public interface IPersonsGetterService
     {

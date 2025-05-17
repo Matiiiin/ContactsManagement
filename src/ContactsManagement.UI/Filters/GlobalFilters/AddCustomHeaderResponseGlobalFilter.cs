@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDMVC.Filters.GlobalFilters;
+namespace ContactsManagement.UI.Filters.GlobalFilters;
 
 public class AddCustomHeaderResponseGlobalActionFilter : IActionFilter
 {
