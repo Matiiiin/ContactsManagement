@@ -1,6 +1,6 @@
 ﻿services:
   contacts-management:
-#    container_name: contacts-management
+    container_name: contacts-management
     build:
       context: .
       dockerfile: Dockerfile
@@ -8,6 +8,8 @@
       - "8001:8000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:8000
+      - ASPNETCORE_HTTP_PORTS=8000
       - MSSQL_SERVER=sql-server
       - MSSQL_PORT=1433
       - MSSQL_DATABASE=master
