@@ -2,12 +2,12 @@
 using ContactsManagement.Core.Domain.Entities;
 using ContactsManagement.Core.Enums;
 
-namespace ContactsManagement.Core.DTO
+namespace ContactsManagement.Core.DTO.Persons
 {
     public class PersonAddRequest
     {
         [Required(ErrorMessage = "Please provide a {0}")]
-        [Display(Name = "Person Name")]
+        [Display(Name = "Persons Name")]
         public string? PersonName { get; set; }
 
         [Required(ErrorMessage ="Email cannot be null")]

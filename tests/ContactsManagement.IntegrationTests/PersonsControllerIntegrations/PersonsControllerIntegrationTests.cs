@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.DTO.Persons;
 using ContactsManagement.Core.ServiceContracts.Persons;
 using FluentAssertions;
 using HtmlAgilityPack;

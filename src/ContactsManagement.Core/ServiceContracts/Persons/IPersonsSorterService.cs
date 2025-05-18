@@ -1,4 +1,5 @@
 ﻿using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.DTO.Persons;
 using ContactsManagement.Core.Enums;
 
 namespace ContactsManagement.Core.ServiceContracts.Persons

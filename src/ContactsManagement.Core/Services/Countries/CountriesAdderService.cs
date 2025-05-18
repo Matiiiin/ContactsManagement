@@ -1,5 +1,5 @@
 ﻿using ContactsManagement.Core.Domain.RepositoryContracts;
-using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.DTO.Countries;
 using ContactsManagement.Core.ServiceContracts.Countries;
 
 namespace ContactsManagement.Core.Services.Countries

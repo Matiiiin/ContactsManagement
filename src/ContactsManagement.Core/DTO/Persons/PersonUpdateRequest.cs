@@ -2,7 +2,7 @@
 using ContactsManagement.Core.Domain.Entities;
 using ContactsManagement.Core.Enums;
 
-namespace ContactsManagement.Core.DTO;
+namespace ContactsManagement.Core.DTO.Persons;
 
 public class PersonUpdateRequest
 {
@@ -10,7 +10,7 @@ public class PersonUpdateRequest
     public Guid? PersonID { get; set; }
     
     [Required(ErrorMessage = "{0} is required")]
-    [Display(Name = "Person Name")]
+    [Display(Name = "Persons Name")]
     public string? PersonName { get; set; }
     
     [Required(ErrorMessage = "{0} is required")]

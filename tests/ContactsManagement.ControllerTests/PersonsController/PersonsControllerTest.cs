@@ -1,6 +1,8 @@
 ﻿using AutoFixture;
 using ContactsManagement.Core.Domain.Entities;
 using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.DTO.Countries;
+using ContactsManagement.Core.DTO.Persons;
 using ContactsManagement.Core.Enums;
 using ContactsManagement.Core.ServiceContracts.Countries;
 using ContactsManagement.Core.ServiceContracts.Persons;
