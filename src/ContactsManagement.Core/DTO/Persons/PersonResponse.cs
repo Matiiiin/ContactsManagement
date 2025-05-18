@@ -1,7 +1,7 @@
 ﻿using ContactsManagement.Core.Domain.Entities;
 using ContactsManagement.Core.Enums;
 
-namespace ContactsManagement.Core.DTO
+namespace ContactsManagement.Core.DTO.Persons
 {
     public class PersonResponse
     {

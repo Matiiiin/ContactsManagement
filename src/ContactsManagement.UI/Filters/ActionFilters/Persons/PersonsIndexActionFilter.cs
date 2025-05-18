@@ -1,4 +1,5 @@
 ﻿using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.DTO.Persons;
 using ContactsManagement.UI.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 

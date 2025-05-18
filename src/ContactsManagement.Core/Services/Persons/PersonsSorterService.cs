@@ -1,5 +1,6 @@
 ﻿using ContactsManagement.Core.Domain.RepositoryContracts;
 using ContactsManagement.Core.DTO;
+using ContactsManagement.Core.DTO.Persons;
 using ContactsManagement.Core.Enums;
 using ContactsManagement.Core.ServiceContracts.Persons;
 using Serilog;
