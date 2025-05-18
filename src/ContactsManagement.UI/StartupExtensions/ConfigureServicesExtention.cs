@@ -1,4 +1,5 @@
-﻿using ContactsManagement.Core.Domain.RepositoryContracts;
+﻿using ContactsManagement.Core.Domain.IdentityEntities;
+using ContactsManagement.Core.Domain.RepositoryContracts;
 using ContactsManagement.Core.ServiceContracts.Countries;
 using ContactsManagement.Core.ServiceContracts.Persons;
 using ContactsManagement.Core.Services.Countries;
@@ -9,6 +10,8 @@ using ContactsManagement.UI.Filters.ActionFilters.Persons;
 using ContactsManagement.UI.Filters.GlobalFilters;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContactsManagement.UI.StartupExtensions;
@@ -23,7 +26,7 @@ public static class ConfigureServicesExtention
          options.StatusCodeSelector = (e) => 500;
       });
 
-
+      
       services.AddControllersWithViews(options =>
       {
          options.Filters.Add<AddCustomHeaderResponseGlobalActionFilter>();
@@ -61,6 +64,13 @@ public static class ConfigureServicesExtention
          options.MultipartBodyLengthLimit = 99999999999999;
       });
       
+      services
+         .AddIdentity<ApplicationUser , ApplicationRole>()
+         .AddEntityFrameworkStores<ApplicationDbContext>()
+         .AddDefaultTokenProviders()
+         .AddUserStore<UserStore<ApplicationUser , ApplicationRole ,ApplicationDbContext , Guid>>()
+         .AddRoleStore<RoleStore<ApplicationRole ,ApplicationDbContext , Guid>>();
+
       return services;
    } 
 }
