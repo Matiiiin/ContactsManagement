@@ -17,6 +17,7 @@ public class AccountController : Controller
         _signInManager = signInManager;
     }
     [Route("[action]")]
+    [HttpGet]
     public IActionResult Register()
     {
         return View();
@@ -27,7 +28,23 @@ public class AccountController : Controller
     [AccountSubmitRegisterActionFilter]
     public async Task<IActionResult> SubmitRegister([FromForm] RegisterDTO registerDTO)
     {
-        return Json(registerDTO);
+        var user = new ApplicationUser()
+        {
+            UserName = registerDTO.Email,
+            Email = registerDTO.Email,
+            EmailConfirmed = false,
+            FullName = registerDTO.PersonName,
+            PhoneNumber = registerDTO.Phone,
+            PhoneNumberConfirmed = false,
+        };
+        var result = await _userManager.CreateAsync(user, registerDTO.Password!);
+        if (!result.Succeeded)
+        {
+            var errors = result.Errors.Select(e => e.Description);
+            ViewBag.Errors = errors;
+            return View("Register" , registerDTO);
+        }
+        return RedirectToAction("Index", "Persons");
     }
     public IActionResult Login()
     {

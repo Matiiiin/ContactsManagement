@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactsManagement.Core.DTO.Identities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ContactsManagement.UI.Filters.ActionFilters.Account;
@@ -16,7 +17,11 @@ public class AccountSubmitRegisterActionFilter : ActionFilterAttribute
         if (!controller!.ModelState.IsValid)
         {
             var errors = controller.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-            context.Result = new BadRequestObjectResult(errors);
+            controller.ViewBag.Errors = errors;
+            context.Result = new ViewResult()
+            {
+                ViewName = "~/Views/Account/Register.cshtml",
+            };
         }
         return base.OnActionExecutionAsync(context, next);
     }

@@ -15,8 +15,7 @@ public class RegisterDTO
     [Required(ErrorMessage = "Phone number cannot be empty.")]
     [MaxLength(11 , ErrorMessage = "Invalid phone number. Max length 11 characters.")]
     [MinLength(11 , ErrorMessage = "Invalid phone number. Min length 11 characters.")]
-    [RegularExpression("[^0-9]*$" , ErrorMessage = "Phone number should only contain numbers.") ]
-    [DataType(DataType.PhoneNumber)]
+    [RegularExpression(@"^\d+$", ErrorMessage = "Phone number should only contain numbers.")]    [DataType(DataType.PhoneNumber)]
     public string? Phone { get; set; }
     
     [Required(ErrorMessage = "Password cannot be empty.")]
