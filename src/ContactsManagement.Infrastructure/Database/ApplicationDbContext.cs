@@ -19,6 +19,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser , Applicat
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         
+          base.OnModelCreating(modelBuilder);
+        
         //Settings table names
         modelBuilder.Entity<Person>().ToTable("Persons");    
         modelBuilder.Entity<Country>().ToTable("Countries");
