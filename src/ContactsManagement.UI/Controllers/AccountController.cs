@@ -1,11 +1,17 @@
-﻿using ContactsManagement.Core.Domain.IdentityEntities;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.Core.DTO.Identities;
 using ContactsManagement.UI.Filters.ActionFilters.Account;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace ContactsManagement.UI.Controllers;
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -16,14 +22,12 @@ public class AccountController : Controller
         _userManager = userManager;
         _signInManager = signInManager;
     }
-    [Route("[action]")]
     [HttpGet]
     public IActionResult Register()
     {
         return View();
     }
     
-    [Route("[action]")]
     [HttpPost]
     [AccountSubmitRegisterActionFilter]
     public async Task<IActionResult> SubmitRegister([FromForm] RegisterDTO registerDTO)
@@ -44,10 +48,18 @@ public class AccountController : Controller
             ViewBag.Errors = errors;
             return View("Register" , registerDTO);
         }
+        await _signInManager.SignInAsync(user, isPersistent: false);
         return RedirectToAction("Index", "Persons");
     }
     public IActionResult Login()
     {
-        throw new NotImplementedException();
+        return View();
+    }
+    
+    public async Task<IActionResult> SubmitLogin([FromForm] LoginDTO loginDTO)
+    {
+        var user = _userManager.FindByEmailAsync(loginDTO.Email!).Result;
+        await _signInManager.SignInAsync(user!, isPersistent: false);
+        return RedirectToAction("Index" ,"Persons");
     }
 }
