@@ -90,7 +90,17 @@ public static class ConfigureServicesExtention
       // All Identity operations (register, login, role assignment, etc.) are handled using your custom types and database context, ensuring full integration with your app’s data model.
 
       services
-         .AddIdentity<ApplicationUser , ApplicationRole>()
+         .AddIdentity<ApplicationUser , ApplicationRole>(options =>
+         {
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 1;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredUniqueChars = 0;
+            
+            // options.User.RequireUniqueEmail = true;
+         })
          .AddEntityFrameworkStores<ApplicationDbContext>()
          .AddDefaultTokenProviders()
          .AddUserStore<UserStore<ApplicationUser , ApplicationRole ,ApplicationDbContext , Guid>>()
