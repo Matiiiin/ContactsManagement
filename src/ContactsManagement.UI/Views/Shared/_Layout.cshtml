@@ -25,40 +25,40 @@
             
             
             @if (@User.Identity!.IsAuthenticated)
+            {
+                <li>
+                    <span style="font-weight:bold; color:#2c3e50; margin-right:1em; font-size:1.1em; vertical-align:middle;">@User.Identity.Name</span>
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                        <button type="submit" class="button"> Logout</button>
+                    </form>
+                </li>
+
+            }
+            else
+            {
+                <li>
+                    @if (@ViewContext.HttpContext.Request.Path.Value == "/Account/Login")
                     {
-                        <li>
-                            <span style="font-weight:bold; color:#2c3e50; margin-right:1em; font-size:1.1em; vertical-align:middle;">@User.Identity.Name</span>
-                            <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                                <button type="submit" class="button"> Logout</button>
-                            </form>
-                        </li>
+                        <a asp-action="Login" asp-controller="Account" class="nav-active">Login</a>
 
                     }
                     else
                     {
-                        <li>
-                            @if (@ViewContext.HttpContext.Request.Path.Value == "/Account/Login")
-                            {
-                                <a asp-action="Login" asp-controller="Account" class="nav-active">Login</a>
+                        <a asp-action="Login" asp-controller="Account">Login</a>
 
-                            }
-                            else
-                            {
-                                <a asp-action="Login" asp-controller="Account">Login</a>
-
-                            }
-                        </li>
-                        <li>
-                            @if (@ViewContext.HttpContext.Request.Path.Value == "/Account/Register")
-                            {
-                                <a asp-action="Register" asp-controller="Account" class="nav-active">Register</a>
-                            }
-                            else
-                            {
-                                <a asp-action="Register" asp-controller="Account">Register</a>
-                            }
-                        </li>
                     }
+                </li>
+                <li>
+                    @if (@ViewContext.HttpContext.Request.Path.Value == "/Account/Register")
+                    {
+                        <a asp-action="Register" asp-controller="Account" class="nav-active">Register</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Register" asp-controller="Account">Register</a>
+                    }
+                </li>
+            }
             <li>
                 @if (@ViewContext.HttpContext.Request.Path.Value == "/Persons/Create")
                 {
@@ -72,11 +72,10 @@
             </li>
         </ul>
     </div>
-
+</div>
     <div class="page-content">
         @RenderBody()
     </div>
-</div>
     @RenderSection("scripts" , required:false)
 </body>
 </html>

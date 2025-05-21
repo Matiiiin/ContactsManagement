@@ -1,12 +1,9 @@
-﻿using ContactsManagement.Core.DTO.Identities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Serilog;
 
 namespace ContactsManagement.UI.Filters.ActionFilters.Account;
 
-public class AccountSubmitRegisterActionFilter : ActionFilterAttribute
+public class AccountSubmitLoginActionFilter :ActionFilterAttribute
 {
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
@@ -22,13 +19,12 @@ public class AccountSubmitRegisterActionFilter : ActionFilterAttribute
             controller.ViewBag.Errors = errors;
             context.Result = new ViewResult()
             {
-                ViewName = "~/Views/Account/Register.cshtml",
+                ViewName = "~/Views/Account/Login.cshtml",
             };
         }
         else
         {
             await next();
-        }
-
+        }    
     }
 }
