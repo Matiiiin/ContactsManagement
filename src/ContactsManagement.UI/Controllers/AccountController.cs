@@ -51,15 +51,23 @@ public class AccountController : Controller
         await _signInManager.SignInAsync(user, isPersistent: false);
         return RedirectToAction("Index", "Persons");
     }
+    [HttpGet]
     public IActionResult Login()
     {
         return View();
     }
     
+    [HttpPost]
+    [AccountSubmitLoginActionFilter]
     public async Task<IActionResult> SubmitLogin([FromForm] LoginDTO loginDTO)
     {
-        var user = _userManager.FindByEmailAsync(loginDTO.Email!).Result;
-        await _signInManager.SignInAsync(user!, isPersistent: false);
+        
+        var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, false, false);
+        if (!result.Succeeded)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt , Check your email and password again.");
+            return View("Login", loginDTO);
+        }
         return RedirectToAction("Index" ,"Persons");
     }
 
