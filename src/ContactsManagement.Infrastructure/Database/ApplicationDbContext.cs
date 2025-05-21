@@ -1,5 +1,6 @@
 ﻿using ContactsManagement.Core.Domain.Entities;
 using ContactsManagement.Core.Domain.IdentityEntities;
+using ContactsManagement.Core.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,23 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser , Applicat
         modelBuilder.Entity<Country>().ToTable("Countries");
         
         //Seeding
+        var roles = new List<ApplicationRole>()
+        {
+            new()
+            {
+                Id = Guid.Parse("815b6a98-bd4e-4c08-9ac1-7c795452e498"),
+                Name = "Admin",
+                NormalizedName = "ADMIN"
+            },
+            new()
+            {
+                Id = Guid.Parse("8e2af4f9-5b73-4e1d-9ad8-a83b12b4b397"),
+                Name = "User",
+                NormalizedName = "USER"
+            }
+        };
+        
+  
         var countries = new List<Country>
         {
             new() { CountryID = Guid.Parse("4d6681c6-d6d4-4520-8b4b-9ad183ee271c"), CountryName = "Germany" },
@@ -153,6 +171,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser , Applicat
         
         modelBuilder.Entity<Person>().HasData(persons);
         modelBuilder.Entity<Country>().HasData(countries);
+        modelBuilder.Entity<ApplicationRole>().HasData(roles);
+
         
         //Fluent API
         modelBuilder.Entity<Person>().Property(p => p.DateOfBirth).HasComment("Comment of dateofbirth");
