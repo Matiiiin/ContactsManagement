@@ -109,6 +109,10 @@ public static class ConfigureServicesExtention
       services
          .AddAuthentication(BearerTokenDefaults.AuthenticationScheme);
       
+      services.ConfigureApplicationCookie(options =>
+      {
+         options.AccessDeniedPath = "/Account/AccessDenied";
+      });
       
       services.AddAuthorization(options => {
          options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.Core.DTO.Identities;
+using ContactsManagement.Core.Enums;
 using ContactsManagement.UI.Filters.ActionFilters.Account;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,11 +17,13 @@ public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _roleManager = roleManager;
     }
     [HttpGet]
     public IActionResult Register()
@@ -48,6 +51,10 @@ public class AccountController : Controller
             ViewBag.Errors = errors;
             return View("Register" , registerDTO);
         }
+
+        var userRole = await _roleManager.FindByNameAsync(UserRoleEnum.User.ToString());
+        await _userManager.AddToRoleAsync(user, userRole.Name);
+        
         await _signInManager.SignInAsync(user, isPersistent: false);
         return RedirectToAction("Index", "Persons");
     }
@@ -81,5 +88,9 @@ public class AccountController : Controller
     {
         var result = await _userManager.FindByEmailAsync(email);
         return result == null ? Json(true) : Json(false);
+    }
+    public async Task<IActionResult> AccessDenied()
+    {
+        return Content("Unauthorized");
     }
 }
