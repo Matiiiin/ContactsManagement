@@ -13,7 +13,62 @@
         <div class="navbar-brand">CRUD Demo</div>
         <ul>
             <li>
-                <a href="~/persons/index">Persons</a>
+                @if (@ViewContext.HttpContext.Request.Path.Value == "/Persons/Index" || @ViewContext.HttpContext.Request.Path.Value == "/")
+                {
+                    <a asp-action="Index" asp-controller="Persons" class="nav-active">Persons</a>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-controller="Persons">Persons</a>
+                }
+            </li>
+            
+            
+            @if (@User.Identity!.IsAuthenticated)
+                    {
+                        <li>
+                            <span style="font-weight:bold; color:#2c3e50; margin-right:1em; font-size:1.1em; vertical-align:middle;">@User.Identity.Name</span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                                <button type="submit">Logout</button>
+                            </form>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li>
+                            @if (@ViewContext.HttpContext.Request.Path.Value == "/Account/Login")
+                            {
+                                <a asp-action="Login" asp-controller="Account" class="nav-active">Login</a>
+
+                            }
+                            else
+                            {
+                                <a asp-action="Login" asp-controller="Account">Login</a>
+
+                            }
+                        </li>
+                        <li>
+                            @if (@ViewContext.HttpContext.Request.Path.Value == "/Account/Register")
+                            {
+                                <a asp-action="Register" asp-controller="Account" class="nav-active">Register</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Register" asp-controller="Account">Register</a>
+                            }
+                        </li>
+                    }
+            <li>
+                @if (@ViewContext.HttpContext.Request.Path.Value == "/Persons/Create")
+                {
+                    <a asp-action="Create" asp-controller="Persons" class="nav-active">Create Person</a>
+                }
+                else
+                {
+                    <a asp-action="Create" asp-controller="Persons">Create Person</a>
+                }
+
             </li>
         </ul>
     </div>
