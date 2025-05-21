@@ -1,9 +1,11 @@
 ﻿using ContactsManagement.Core.Domain.Entities;
 using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.Core.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace ContactsManagement.Infrastructure.Database;
 
@@ -27,6 +29,26 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser , Applicat
         modelBuilder.Entity<Country>().ToTable("Countries");
         
         //Seeding
+        var hasher = new PasswordHasher<ApplicationUser>();
+        var admin = new ApplicationUser()
+        {
+            Id = Guid.Parse("005db85d-8da6-4d5e-a6de-cb0de751cab7"),
+            UserName = "admin@admin.com",
+            NormalizedUserName = "ADMIN@ADMIN.COM",
+            Email = "admin@admin.com",
+            NormalizedEmail = "ADMIN@ADMIN.COM",
+            EmailConfirmed = true,
+            PhoneNumber = "0123456789",
+            PhoneNumberConfirmed = true,
+            // SecurityStamp = Guid.Parse("ebbc47af-1293-44cf-97d6-db81fb78b957").ToString(),
+            // ConcurrencyStamp = Guid.Parse("349d3ccc-9e7e-4ed6-9392-ea1ad82bffaa").ToString(),
+            SecurityStamp = "VYXA6SV5NKN6FNS465MJ3LMGECPCT2QF",
+            ConcurrencyStamp = "098a7ce3-4ba3-4945-96e4-8fd21da3b122",
+            FullName = "admiiiiin",
+            // 123456
+            PasswordHash = "AQAAAAIAAYagAAAAENa7jS7sKmDxR6LpfOL7YD0NVTzTscinU4+udNaL+E9dT7qWYb2LJEVqWau764rlmQ=="
+        };
+        
         var roles = new List<ApplicationRole>()
         {
             new()
@@ -42,7 +64,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser , Applicat
                 NormalizedName = "USER"
             }
         };
-        
+
+
+        var identityUserRole = new IdentityUserRole<Guid>()
+        {
+            RoleId = roles[0].Id,
+            UserId = admin.Id
+        };
   
         var countries = new List<Country>
         {
@@ -172,7 +200,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser , Applicat
         modelBuilder.Entity<Person>().HasData(persons);
         modelBuilder.Entity<Country>().HasData(countries);
         modelBuilder.Entity<ApplicationRole>().HasData(roles);
-
+        modelBuilder.Entity<ApplicationUser>().HasData(admin);
+        modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(identityUserRole);
         
         //Fluent API
         modelBuilder.Entity<Person>().Property(p => p.DateOfBirth).HasComment("Comment of dateofbirth");
