@@ -76,4 +76,10 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index","Persons");
     }
+
+    public async Task<IActionResult> EmailHasAlreadyBeenRegistered(string email)
+    {
+        var result = await _userManager.FindByEmailAsync(email);
+        return result == null ? Json(true) : Json(false);
+    }
 }

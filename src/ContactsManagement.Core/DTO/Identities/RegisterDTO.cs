@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ContactsManagement.Core.DTO.Identities;
 
@@ -10,6 +11,7 @@ public class RegisterDTO
     
     [Required(ErrorMessage = "Email cannot be empty.")]
     [EmailAddress(ErrorMessage = "Invalid email address.")]
+    [Remote(action: "EmailHasAlreadyBeenRegistered", controller: "Account" , ErrorMessage = "Email address already registered")]
     public string? Email { get; set; }
     
     [Required(ErrorMessage = "Phone number cannot be empty.")]
