@@ -75,6 +75,12 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, "Invalid login attempt , Check your email and password again.");
             return View("Login", loginDTO);
         }
+
+        if (await _userManager.IsInRoleAsync((await _userManager.FindByNameAsync(loginDTO.Email))!, UserRoleEnum.Admin.ToString()))
+        {
+            return RedirectToAction("Index", "AdminHome" , new {area = "Admin"});
+        }
+        
         return RedirectToAction("Index" ,"Persons");
     }
 
