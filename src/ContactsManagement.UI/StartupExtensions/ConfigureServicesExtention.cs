@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContactsManagement.UI.StartupExtensions;
@@ -32,6 +33,7 @@ public static class ConfigureServicesExtention
       services.AddControllersWithViews(options =>
       {
          options.Filters.Add<AddCustomHeaderResponseGlobalActionFilter>();
+         options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
          // options.Filters.Add<AuthTokenCheckAuthorizationFilter>();
       });
       services.AddScoped<ICountriesAdderService,CountriesAdderService>();

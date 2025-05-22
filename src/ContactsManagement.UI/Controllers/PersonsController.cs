@@ -102,7 +102,6 @@ public class PersonsController(IPersonsGetterService personsGetterService , IPer
 
     [Route("[action]/{personID:guid}")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Update([FromForm] PersonUpdateRequest? personUpdateRequest , Guid personID)
     {
         if (personUpdateRequest == null) return BadRequest("Please provide a valid person data");
@@ -131,7 +130,6 @@ public class PersonsController(IPersonsGetterService personsGetterService , IPer
     
     [Route("[action]")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [TypeFilter<PersonsSubmitDeleteActionFilter>]
     public async Task<IActionResult> SubmitDelete([FromForm] Guid personID)
     {
