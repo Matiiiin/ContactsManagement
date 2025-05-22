@@ -4,20 +4,19 @@
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "http://0.0.0.0:8000",
+      "launchUrl": "https://localhost:8000",
+      "applicationUrl": "https://localhost:8000",
+      "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:8000"
       }
     },
     "WatchNoHotReload": {
       "commandName": "Executable",
       "executablePath": "dotnet",
       "commandLineArgs": "watch --no-hot-reload run --project ContactsManagement.UI",
-      "workingDirectory": "E:\\Programming\\Sample_projects\\Visual studio\\ContactsManagement\\src",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "workingDirectory": "E:\\Programming\\Sample_projects\\Visual studio\\ContactsManagement\\src"
     }
   }
 }
