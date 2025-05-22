@@ -1,3 +1,4 @@
+using ContactsManagement.UI.Middlewares;
 using ContactsManagement.UI.StartupExtensions;
 using Serilog;
 
@@ -15,6 +16,8 @@ builder.Services.ConfigureServices(configuration:builder.Configuration , webHost
 
 
 var app = builder.Build();
+app.UseHttpsRedirection();
+app.UseHsts();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -23,8 +26,10 @@ if (builder.Environment.IsDevelopment())
 else
 {
     // app.UseCustomExceptionHandlingMiddleware();
-    app.UseExceptionHandler();
+    app.UseExceptionHandler("/Error");
 }
+
+
 app.UseSerilogRequestLogging();
 app.UseHttpLogging();
 app.UseStaticFiles();
