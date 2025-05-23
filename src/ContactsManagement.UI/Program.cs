@@ -1,4 +1,3 @@
-using ContactsManagement.UI.Middlewares;
 using ContactsManagement.UI.StartupExtensions;
 using Serilog;
 
@@ -37,7 +36,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
+app.MapRazorPages();
 app.Run();
 
 public partial class Program { }
