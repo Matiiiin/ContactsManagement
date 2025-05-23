@@ -84,6 +84,7 @@ public class AccountController : Controller
         return RedirectToAction("Index" ,"Persons");
     }
 
+    [Authorize]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();

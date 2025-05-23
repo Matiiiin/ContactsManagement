@@ -7,7 +7,7 @@ namespace ContactsManagement.UI.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]")]
     [Authorize(Roles = "Admin")]
     // [Authorize(Policy = "AdminOnly")]
-    public class HomeController : Controller
+    public class AdminHomeController : Controller
     {
         [HttpGet]
         public ActionResult Index()

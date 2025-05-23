@@ -10,10 +10,13 @@ using ContactsManagement.UI.Filters.ActionFilters.Persons;
 using ContactsManagement.UI.Filters.GlobalFilters;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -102,24 +105,46 @@ public static class ConfigureServicesExtention
             options.Password.RequiredUniqueChars = 0;
             
             // options.User.RequireUniqueEmail = true;
-         })
+         }).AddDefaultUI()
          .AddEntityFrameworkStores<ApplicationDbContext>()
          .AddDefaultTokenProviders()
          .AddUserStore<UserStore<ApplicationUser , ApplicationRole ,ApplicationDbContext , Guid>>()
          .AddRoleStore<RoleStore<ApplicationRole ,ApplicationDbContext , Guid>>();
-
+      
       services
-         .AddAuthentication(BearerTokenDefaults.AuthenticationScheme);
+         .AddAuthentication(o =>
+         {
+            // This forces challenge results to be handled by Google OpenID Handler, so there's no
+            // need to add an AccountController that emits challenges for Login.
+            o.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+            // This forces forbid results to be handled by Google OpenID Handler, which checks if
+            // extra scopes are required and does automatic incremental auth.
+            o.DefaultForbidScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+            // Default scheme that will handle everything else.
+            // Once a user is authenticated, the OAuth2 token info is stored in cookies.
+            o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+         })
+         .AddCookie()
+         .AddGoogleOpenIdConnect(options =>
+         {
+            options.ClientId = configuration["Authentication:Google:ClientId"];
+            options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+         });
       
       services.ConfigureApplicationCookie(options =>
       {
          options.AccessDeniedPath = "/Account/AccessDenied";
       });
       
+      
+
+      
+      
       services.AddAuthorization(options => {
+         // options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
          options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
       });
-      
+      services.AddRazorPages();
       
       return services;
    } 
