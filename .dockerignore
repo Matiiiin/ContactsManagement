@@ -23,6 +23,17 @@ src/ContactsManagement.UI/[Bb]in/
 src/ContactsManagement.UI/[Oo]bj/
 src/ContactsManagement.UI/[Ll]og/
 # Build results
+src/ContactsManagement.WebApi.UI/[Dd]ebug/
+src/ContactsManagement.WebApi.UI/[Dd]ebugPublic/
+src/ContactsManagement.WebApi.UI/[Rr]elease/
+src/ContactsManagement.WebApi.UI/x86/
+src/ContactsManagement.WebApi.UI/[Rr]eleases/
+src/ContactsManagement.WebApi.UI/x64/
+src/ContactsManagement.WebApi.UI/bld/
+src/ContactsManagement.WebApi.UI/[Bb]in/
+src/ContactsManagement.WebApi.UI/[Oo]bj/
+src/ContactsManagement.WebApi.UI/[Ll]og/
+# Build results
 src/ContactsManagement.Core/[Dd]ebug/
 src/ContactsManagement.Core/[Dd]ebugPublic/
 src/ContactsManagement.Core/[Rr]elease/

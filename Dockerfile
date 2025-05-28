@@ -8,6 +8,7 @@ WORKDIR /src
 COPY ["src/ContactsManagement.Core/ContactsManagement.Core.csproj", "ContactsManagement.Core/"]
 COPY ["src/ContactsManagement.Infrastructure/ContactsManagement.Infrastructure.csproj", "ContactsManagement.Infrastructure/"]
 COPY ["src/ContactsManagement.UI/ContactsManagement.UI.csproj", "ContactsManagement.UI/"]
+#COPY ["src/ContactsManagement.WebApi.UI/ContactsManagement.WebApi.UI.csproj", "ContactsManagement.WebApi.UI/"]
 COPY ./src .
 
 RUN dotnet restore ContactsManagement.UI/ContactsManagement.UI.csproj

@@ -1,4 +1,5 @@
 using ContactsManagement.UI.StartupExtensions;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ app.UseHsts();
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    IdentityModelEventSource.ShowPII = true;
 }
 else
 {
