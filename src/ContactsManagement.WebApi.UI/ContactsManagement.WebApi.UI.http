@@ -1,0 +1,6 @@
+@ContactsManagement.WebApi.UI_HostAddress = http://localhost:5182
+
+GET {{ContactsManagement.WebApi.UI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

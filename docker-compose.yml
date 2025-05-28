@@ -1,9 +1,9 @@
 ﻿services:
-  contacts-management:
-    container_name: contacts-management
+  contacts-management.web.ui:
+    container_name: contacts-management.web.ui
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: src/ContactsManagement.UI/Dockerfile
     ports:
       - "8001:8000"
     environment:
@@ -41,3 +41,10 @@
       - ACCEPT_EULA=Y
     volumes:
       - ./seq:/data
+        
+        
+  contacts-management.webapi.ui:
+    image: contacts-management.webapi.ui
+    build:
+      context: .
+      dockerfile: src/ContactsManagement.WebApi.UI/Dockerfile
