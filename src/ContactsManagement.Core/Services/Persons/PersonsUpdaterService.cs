@@ -7,7 +7,7 @@ using Serilog;
 
 namespace ContactsManagement.Core.Services.Persons
 {
-    public class PersonsUpdaterService(IPersonsRepository _personsRepository , IDiagnosticContext _diagnosticContext) :IPersonsUpdaterService
+    public class PersonsUpdaterService(ICountriesRepository _countriesRepository ,IPersonsRepository _personsRepository , IDiagnosticContext _diagnosticContext) :IPersonsUpdaterService
     {
         public async Task<PersonResponse> UpdatePerson(PersonUpdateRequest? personUpdateRequest)
         {
@@ -21,6 +21,11 @@ namespace ContactsManagement.Core.Services.Persons
             if (await _personsRepository.GetPersonByPersonID(personUpdateRequest.PersonID) == null)
             {
                 throw new ArgumentException("Given person does not exist");
+            }
+
+            if (await _countriesRepository.GetCountryByCountryID(personUpdateRequest.CountryID) == null)
+            {
+                throw new ArgumentException("Given country does not exist");
             }
 
             // _db.sp_UpdatePerson(personUpdateRequest.ToPerson());
