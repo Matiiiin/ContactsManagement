@@ -1,4 +1,6 @@
+using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.WebApi.UI.StartupExtensions;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,5 +27,9 @@ app.UseHttpLogging();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
+app.MapIdentityApi<ApplicationUser>();
+
 app.Run();
