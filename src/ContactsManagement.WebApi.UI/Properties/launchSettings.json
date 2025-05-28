@@ -5,6 +5,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
+      "launchUrl": "http://localhost:5182",
       "applicationUrl": "http://localhost:5182",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -18,6 +19,12 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "WatchNoHotReload": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "watch --no-hot-reload run --project ContactsManagement.WebApi.UI",
+      "workingDirectory": "E:\\Programming\\Sample_projects\\Visual studio\\ContactsManagement\\src"
     }
   }
 }
