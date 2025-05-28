@@ -63,7 +63,7 @@ public static class ConfigureServicesExtension
         
         services.AddAuthentication(options =>
         {
-            options.DefaultAuthenticateScheme = BearerTokenDefaults.AuthenticationScheme;
+            // options.DefaultAuthenticateScheme = def;
         });
         services.AddAuthorization(options =>
         {
