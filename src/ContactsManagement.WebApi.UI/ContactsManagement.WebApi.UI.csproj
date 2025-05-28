@@ -31,4 +31,8 @@
       <ProjectReference Include="..\ContactsManagement.Infrastructure\ContactsManagement.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Areas\Identity\Controllers\" />
+    </ItemGroup>
+
 </Project>
