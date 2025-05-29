@@ -52,6 +52,7 @@ public class PersonsController : CustomApiController
     /// </summary>
     /// <returns>An ordered enumerable list of <see cref="PersonResponse"/> objects.</returns>
     [HttpGet]
+    [Produces("application/xml")]
     public async Task<IOrderedEnumerable<PersonResponse>> GetPersons()
     {
         return (await _personsGetterService.GetAllPersons()).OrderBy(o => o.PersonName);
