@@ -21,12 +21,17 @@ public static class ConfigureServicesExtension
 {
     public static IServiceCollection ConfigureServices(this IServiceCollection services , IConfiguration configuration)
     {
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(options =>
+        {
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "ContactsManagement.WebApi.UI.Api.xml"));
+        });
+        services.AddOpenApi();
         services.AddControllers(config =>
         {
         }).AddNewtonsoftJson();
         
         
-        services.AddOpenApi();
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("Default"));
