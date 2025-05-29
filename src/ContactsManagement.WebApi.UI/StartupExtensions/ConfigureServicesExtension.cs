@@ -5,11 +5,13 @@ using ContactsManagement.Core.ServiceContracts.Persons;
 using ContactsManagement.Core.Services.Persons;
 using ContactsManagement.Infrastructure.Database;
 using ContactsManagement.Infrastructure.Repositories;
+using ContactsManagement.WebApi.UI.Controllers;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using NuGet.DependencyResolver;
@@ -27,9 +29,13 @@ public static class ConfigureServicesExtension
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "ContactsManagement.WebApi.UI.Api.xml"));
         });
         services.AddOpenApi();
-        services.AddControllers(config =>
-        {
-        }).AddNewtonsoftJson();
+        services.AddControllers(options =>
+            {
+                options.Filters.Add(new ProducesAttribute("application/json"));
+                options.Filters.Add(new ConsumesAttribute("application/json"));
+            })
+            .AddNewtonsoftJson()
+            .AddXmlSerializerFormatters();
         
         
         services.AddDbContext<ApplicationDbContext>(options =>
