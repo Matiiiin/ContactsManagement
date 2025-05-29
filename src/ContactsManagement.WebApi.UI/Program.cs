@@ -30,6 +30,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapIdentityApi<ApplicationUser>();
+app.MapGroup("/api/auth/token").MapIdentityApi<ApplicationUser>();
 
 app.Run();

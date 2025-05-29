@@ -49,6 +49,7 @@ public static class ConfigureServicesExtension
 
         services.AddIdentityApiEndpoints<ApplicationUser>(options =>
             {
+                // options.RoutePrefix = "auth"; // Set your desired prefix
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
