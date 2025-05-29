@@ -7,7 +7,7 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
     [Area("Identity")]
     [Route("api/[area]/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class JwtAuthenticationController : ControllerBase
     {
         [HttpGet("[action]")]
         public ActionResult Me()
