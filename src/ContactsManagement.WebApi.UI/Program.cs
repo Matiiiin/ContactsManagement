@@ -17,7 +17,18 @@ builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    var descriptions = app.DescribeApiVersions();
+       
+    // build a swagger endpoint for each discovered API version
+    foreach ( var description in descriptions )
+    {
+        var url = $"/swagger/{description.GroupName}/swagger.json";
+        var name = description.GroupName.ToUpperInvariant();
+        options.SwaggerEndpoint( url, name );
+    }
+});
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

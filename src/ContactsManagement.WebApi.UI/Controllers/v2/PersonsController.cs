@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,13 @@ using ContactsManagement.Core.DTO.Persons;
 using ContactsManagement.Core.ServiceContracts.Persons;
 using ContactsManagement.Infrastructure.Database;
 
-namespace ContactsManagement.WebApi.UI.Controllers
+namespace ContactsManagement.WebApi.UI.Controllers.v2
 {
     /// <summary>
     /// Controller for handling API requests related to persons (contacts).
     /// </summary>
-public class PersonsController : CustomApiController
+    [ApiVersion(2.0)]
+    public class PersonsController : CustomApiController
 {
     private readonly IPersonsDeleterService _personsDeleterService;
     private readonly ILogger<PersonsController> _logger;
