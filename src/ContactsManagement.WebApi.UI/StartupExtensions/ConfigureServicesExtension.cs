@@ -103,7 +103,13 @@ public static class ConfigureServicesExtension
         services.AddAuthorization(options =>
         {
         });
-        
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policyBuilder =>
+            {
+                policyBuilder.WithOrigins(configuration.GetSection("CorsOrigins").Get<string[]>()!).WithHeaders("Origin").WithMethods("POST");
+            } );
+        });
         return services;
     }
 }
