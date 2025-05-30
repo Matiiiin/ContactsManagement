@@ -1,21 +1,21 @@
 ﻿using System.Text.Json;
+using Asp.Versioning;
 using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.Core.Domain.RepositoryContracts;
 using ContactsManagement.Core.ServiceContracts.Persons;
 using ContactsManagement.Core.Services.Persons;
 using ContactsManagement.Infrastructure.Database;
 using ContactsManagement.Infrastructure.Repositories;
-using ContactsManagement.WebApi.UI.Controllers;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
-using NuGet.DependencyResolver;
-using Serilog;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ContactsManagement.WebApi.UI.StartupExtensions;
 
@@ -23,11 +23,6 @@ public static class ConfigureServicesExtension
 {
     public static IServiceCollection ConfigureServices(this IServiceCollection services , IConfiguration configuration)
     {
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(options =>
-        {
-            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "ContactsManagement.WebApi.UI.Api.xml"));
-        });
         services.AddOpenApi();
         services.AddControllers(options =>
             {
@@ -36,6 +31,34 @@ public static class ConfigureServicesExtension
             })
             .AddNewtonsoftJson()
             .AddXmlSerializerFormatters();
+        
+        
+        services.AddProblemDetails();
+        
+        //Swagger
+       services
+            .AddApiVersioning(options =>
+        {
+            options.ReportApiVersions = true;
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+        })
+            .AddMvc()
+            .AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });;
+        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
+
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(options =>
+        {
+            options.OperationFilter<SwaggerDefaultValues>();
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "ContactsManagement.WebApi.UI.xml"));
+        });
         
         
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -84,3 +107,8 @@ public static class ConfigureServicesExtension
         return services;
     }
 }
+
+
+
+
+
