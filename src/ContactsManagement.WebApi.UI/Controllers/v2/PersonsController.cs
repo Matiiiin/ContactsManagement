@@ -132,7 +132,9 @@ namespace ContactsManagement.WebApi.UI.Controllers.v2
     /// Returns BadRequest if the request is invalid.
     /// </returns>
     [HttpPost]
-    public async Task<ActionResult<PersonResponse>> PostPerson([FromBody] PersonAddRequest? personAddRequest)
+    [Consumes("multipart/form-data")]
+    [Produces("application/json")]
+    public async Task<ActionResult<PersonResponse>> PostPerson([FromForm] PersonAddRequest? personAddRequest)
     {
         PersonResponse? person;
         try
