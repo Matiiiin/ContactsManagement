@@ -2,6 +2,7 @@ using Asp.Versioning;
 using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.Core.DTO.Identities;
 using ContactsManagement.Core.Enums;
+using ContactsManagement.Core.ServiceContracts.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,11 +17,13 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
     [ApiController]
     public class JwtAuthenticationController : ControllerBase
     {
+        private readonly IJwtService _jwtService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public JwtAuthenticationController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public JwtAuthenticationController(IJwtService jwtService,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
+            _jwtService = jwtService;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -60,7 +63,12 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                     var roleResult = await _userManager.AddToRoleAsync(user, UserRoleEnum.User.ToString());
                     if (roleResult.Succeeded)
                     {
-                        return Ok("User created a new account with password.");
+                        return Ok(new JwtRegisterResponseDTO()
+                        {
+                            Email = user.Email,
+                            UserName = user.UserName,
+                            Token = _jwtService.GenerateToken(user)
+                        });
                     }
                     else
                     {
