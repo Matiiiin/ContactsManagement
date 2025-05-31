@@ -6,6 +6,7 @@ using ContactsManagement.Core.ServiceContracts.Persons;
 using ContactsManagement.Core.Services.Persons;
 using ContactsManagement.Infrastructure.Database;
 using ContactsManagement.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ContactsManagement.WebApi.UI.StartupExtensions;
 
@@ -98,11 +100,29 @@ public static class ConfigureServicesExtension
         
         services.AddAuthentication(options =>
         {
-            // options.DefaultAuthenticateScheme = def;
-        });
-        services.AddAuthorization(options =>
+            options.DefaultScheme =
+            options.DefaultAuthenticateScheme =
+            options.DefaultSignOutScheme =
+            options.DefaultChallengeScheme =
+            options.DefaultSignInScheme =
+            options.DefaultForbidScheme =
+            JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
         {
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:SigningKey"]!))
+            };
         });
+
+        
+        services.AddAuthorization();
+        
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(policyBuilder =>
