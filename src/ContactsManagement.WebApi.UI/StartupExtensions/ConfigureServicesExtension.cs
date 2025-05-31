@@ -2,7 +2,9 @@
 using Asp.Versioning;
 using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.Core.Domain.RepositoryContracts;
+using ContactsManagement.Core.ServiceContracts.Authentication;
 using ContactsManagement.Core.ServiceContracts.Persons;
+using ContactsManagement.Core.Services.Authentication;
 using ContactsManagement.Core.Services.Persons;
 using ContactsManagement.Infrastructure.Database;
 using ContactsManagement.Infrastructure.Repositories;
@@ -76,6 +78,7 @@ public static class ConfigureServicesExtension
         services.AddScoped<IPersonsAdderService, PersonsAdderService>();
         services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
         services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();
+        services.AddScoped<IJwtService, JwtService>();
 
         services.AddLogging();
         services.AddHttpLogging(options =>
