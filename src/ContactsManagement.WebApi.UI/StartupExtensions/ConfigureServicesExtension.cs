@@ -140,10 +140,12 @@ public static class ConfigureServicesExtension
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
+                ValidateActor = true,
                 ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
                 ValidIssuer = configuration["Jwt:Issuer"],
                 ValidAudience = configuration["Jwt:Audience"],
-                ValidateActor = true,
                 IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:SigningKey"]!))
             };
         });

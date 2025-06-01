@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
@@ -22,6 +23,7 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
     [ApiController]
     public class JwtAuthenticationController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly IJwtService _jwtService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -34,8 +36,9 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
         /// <param name="userManager">User manager for identity operations.</param>
         /// <param name="signInManager">Sign-in manager for authentication.</param>
 
-        public JwtAuthenticationController(IJwtService jwtService,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public JwtAuthenticationController(IConfiguration configuration,IJwtService jwtService,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
+            _configuration = configuration;
             _jwtService = jwtService;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -71,7 +74,7 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
         /// <returns>A JWT token and user information if authentication is successful; otherwise, an error response.</returns>
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> Login([FromBody] LoginDTO loginDTO)
+        public async Task<ActionResult> CreateToken([FromBody] LoginDTO loginDTO)
         {
             try
             {
@@ -90,12 +93,13 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                 {
                     return Unauthorized("Invalid Password or Email");
                 }
-
+                await _signInManager.SignInAsync(user, false);
                 return Ok(new JwtUserResponseDTO()
                 {
                     Email = user.Email!,
                     UserName = user.UserName!,
-                    Token = _jwtService.GenerateToken(user)
+                    Token = _jwtService.GenerateToken(user),
+                    RefreshToken = user.RefreshToken!
                 });
             }
             catch (Exception e)
@@ -127,6 +131,8 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                     UserName = registerDto.Email,
                     Email = registerDto.Email,
                     FullName = registerDto.Email,
+                    RefreshToken = _jwtService.GenerateRefreshToken(),
+                    RefreshTokenExpiresAt = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["RefreshToken:ExpirationMinutes"]))
                 };
                 var createdUser = await _userManager.CreateAsync(user, registerDto.Password!);
                 if (createdUser.Succeeded)
@@ -136,9 +142,10 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                     {
                         return Ok(new JwtUserResponseDTO()
                         {
-                            Email = user.Email,
-                            UserName = user.UserName,
-                            Token = _jwtService.GenerateToken(user)
+                            Email = user.Email!,
+                            UserName = user.UserName!,
+                            Token = _jwtService.GenerateToken(user),
+                            RefreshToken = user.RefreshToken!
                         });
                     }
                     else
@@ -154,6 +161,76 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 return Problem(ex.Message , ex.ToString() ,500,"Registration Failed");
+            }
+        }
+
+        /// <summary>
+        /// Refreshes the JWT access token using a valid refresh token.
+        /// </summary>
+        /// <param name="refreshTokenDTO">The DTO containing the expired access token and the refresh token.</param>
+        /// <returns>
+        /// A new JWT access token and refresh token if the provided refresh token is valid; otherwise, an error response.
+        /// </returns>
+        /// <response code="200">Returns the new JWT access token and refresh token.</response>
+        /// <response code="400">If the provided token or refresh token is invalid.</response>
+        /// <response code="500">If an internal server error occurs.</response>
+        [HttpPost("[action]")]
+        public async Task<ActionResult> RefreshToken([FromBody] RefreshTokenDTO refreshTokenDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    return BadRequest(errors);
+                }
+                var handler = new JwtSecurityTokenHandler();
+                var validationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateActor = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = false,
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidAudience = _configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]!))
+                };
+                handler.ValidateToken(
+                    refreshTokenDTO.Token,
+                    validationParameters,
+                    out SecurityToken validatedToken
+                );
+
+                var userId = (validatedToken as JwtSecurityToken)?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("Invalid token");
+                }
+                var user = _userManager.FindByIdAsync(userId!).Result;
+
+                if (user == null)
+                {
+                    return BadRequest("Invalid token");
+                }
+                var userRefreshToken = user!.RefreshToken;
+                if (userRefreshToken != refreshTokenDTO.Refreshtoken)
+                {
+                    return BadRequest("Invalid refresh token");
+                }
+                var newToken = await _jwtService.GenerateTokenFromRefreshToken(user , refreshTokenDTO.Refreshtoken!);
+                
+                return Ok(new JwtUserResponseDTO()
+                {
+                    Email = user.Email!,
+                    UserName = user.UserName!,
+                    Token = newToken.Token,
+                    RefreshToken = newToken.RefreshToken
+                });
+            }
+            catch (Exception e)
+            {
+                return Problem("Something went wrong", e.ToString() ,500,"Registration Failed");
             }
         }
         
