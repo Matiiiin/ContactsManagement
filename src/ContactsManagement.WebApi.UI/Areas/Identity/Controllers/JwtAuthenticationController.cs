@@ -22,6 +22,7 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
     [ApiController]
     public class JwtAuthenticationController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly IJwtService _jwtService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -34,8 +35,9 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
         /// <param name="userManager">User manager for identity operations.</param>
         /// <param name="signInManager">Sign-in manager for authentication.</param>
 
-        public JwtAuthenticationController(IJwtService jwtService,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public JwtAuthenticationController(IConfiguration configuration,IJwtService jwtService,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
+            _configuration = configuration;
             _jwtService = jwtService;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -71,7 +73,7 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
         /// <returns>A JWT token and user information if authentication is successful; otherwise, an error response.</returns>
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> Login([FromBody] LoginDTO loginDTO)
+        public async Task<ActionResult> CreateToken([FromBody] LoginDTO loginDTO)
         {
             try
             {
@@ -95,7 +97,8 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                 {
                     Email = user.Email!,
                     UserName = user.UserName!,
-                    Token = _jwtService.GenerateToken(user)
+                    Token = _jwtService.GenerateToken(user),
+                    RefreshToken = user.RefreshToken!
                 });
             }
             catch (Exception e)
@@ -127,6 +130,8 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                     UserName = registerDto.Email,
                     Email = registerDto.Email,
                     FullName = registerDto.Email,
+                    RefreshToken = _jwtService.GenerateRefreshToken(),
+                    RefreshTokenExpiresAt = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["RefreshToken:ExpirationMinutes"]))
                 };
                 var createdUser = await _userManager.CreateAsync(user, registerDto.Password!);
                 if (createdUser.Succeeded)
@@ -136,9 +141,10 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                     {
                         return Ok(new JwtUserResponseDTO()
                         {
-                            Email = user.Email,
-                            UserName = user.UserName,
-                            Token = _jwtService.GenerateToken(user)
+                            Email = user.Email!,
+                            UserName = user.UserName!,
+                            Token = _jwtService.GenerateToken(user),
+                            RefreshToken = user.RefreshToken!
                         });
                     }
                     else
