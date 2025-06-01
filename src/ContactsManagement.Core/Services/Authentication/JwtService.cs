@@ -3,7 +3,9 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using ContactsManagement.Core.Domain.IdentityEntities;
+using ContactsManagement.Core.DTO.JwtToken;
 using ContactsManagement.Core.ServiceContracts.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -12,12 +14,14 @@ namespace ContactsManagement.Core.Services.Authentication;
 
 public class JwtService : IJwtService
 {
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _config;
     private readonly ILogger<JwtService> _logger;
     private readonly SymmetricSecurityKey _key;
 
-    public JwtService(IConfiguration config , ILogger<JwtService> logger)
+    public JwtService(UserManager<ApplicationUser> userManager ,IConfiguration config , ILogger<JwtService> logger)
     {
+        _userManager = userManager;
         _config = config;
         _logger = logger;
         _key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config["Jwt:SigningKey"]!));
@@ -57,5 +61,31 @@ public class JwtService : IJwtService
         var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
+    }
+
+    public async Task<RefreshTokenGenerateDTO> GenerateTokenFromRefreshToken(ApplicationUser user, string refreshToken)
+    {
+        if (user.RefreshTokenExpiresAt < DateTime.Now)
+        {
+            var newRefreshToken = GenerateRefreshToken();
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiresAt = DateTime.Now.AddMinutes(Convert.ToDouble(_config["RefreshToken:ExpirationMinutes"]));
+            await _userManager.UpdateAsync(user);
+            return new RefreshTokenGenerateDTO()
+            {
+                Token = GenerateToken(user),
+                RefreshToken = newRefreshToken,
+            };
+        }
+        else
+        {
+            return new RefreshTokenGenerateDTO()
+            {
+                Token = GenerateToken(user),
+                RefreshToken = refreshToken,
+            };    
+        }
+        
+        
     }
 }
