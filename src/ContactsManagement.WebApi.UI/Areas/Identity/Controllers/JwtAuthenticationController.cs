@@ -47,7 +47,7 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
         /// <returns>The authenticated user's details or an error response.</returns>
 
         [HttpGet("[action]")]
-        [Authorize]
+        // [Authorize]
         public async Task<ActionResult> Me()
         {
             // Get user ID from claims
@@ -90,7 +90,7 @@ namespace ContactsManagement.WebApi.UI.Areas.Identity.Controllers
                 {
                     return Unauthorized("Invalid Password or Email");
                 }
-
+                await _signInManager.SignInAsync(user, false);
                 return Ok(new JwtUserResponseDTO()
                 {
                     Email = user.Email!,

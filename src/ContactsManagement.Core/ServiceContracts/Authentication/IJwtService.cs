@@ -5,4 +5,5 @@ namespace ContactsManagement.Core.ServiceContracts.Authentication;
 public interface IJwtService
 {
     string GenerateToken(ApplicationUser user); 
+    string GenerateRefreshToken();
 }
