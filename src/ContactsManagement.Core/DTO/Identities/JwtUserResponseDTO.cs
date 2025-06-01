@@ -1,6 +1,6 @@
 ﻿namespace ContactsManagement.Core.DTO.Identities;
 
-public class JwtRegisterResponseDTO
+public class JwtUserResponseDTO
 {
     public string Token { get; set; }
     public string RefreshToken { get; set; }

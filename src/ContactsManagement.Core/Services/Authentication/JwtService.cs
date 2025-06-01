@@ -1,5 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using ContactsManagement.Core.Domain.IdentityEntities;
 using ContactsManagement.Core.ServiceContracts.Authentication;
 using Microsoft.Extensions.Configuration;
@@ -22,10 +24,15 @@ public class JwtService : IJwtService
     }
     public string GenerateToken(ApplicationUser user)
     {
-        var claims = new List<Claim>()
-        {
+
+        var claims = new List<Claim>
+        {            
+            new(JwtRegisteredClaimNames.NameId, user.Id.ToString()!),
             new(JwtRegisteredClaimNames.Email, user.Email!),
-            new(JwtRegisteredClaimNames.GivenName, user.UserName!),
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()!),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.Iss, _config["Jwt:Issuer"]!),
+            new(JwtRegisteredClaimNames.Aud, _config["Jwt:Audience"]!),
         };
         
         var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
@@ -43,4 +50,5 @@ public class JwtService : IJwtService
         return tokenHandler.WriteToken(token);
 
     }
+    
 }
