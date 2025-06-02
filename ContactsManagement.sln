@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests\ContactsManagement.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\ContactsManagement.WebApi.UI", "src\ContactsManagement.WebApi.UI\ContactsManagement.WebApi.UI.csproj", "{5F27BECC-CCC6-4F5F-AA4A-06169D3C5591}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src\ContactsManagement.MinimalApi.UI", "src\ContactsManagement.MinimalApi.UI\ContactsManagement.MinimalApi.UI.csproj", "{C454BE70-E299-4EA1-86F9-00BCE6492F3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{5F27BECC-CCC6-4F5F-AA4A-06169D3C5591}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F27BECC-CCC6-4F5F-AA4A-06169D3C5591}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F27BECC-CCC6-4F5F-AA4A-06169D3C5591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C454BE70-E299-4EA1-86F9-00BCE6492F3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C454BE70-E299-4EA1-86F9-00BCE6492F3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C454BE70-E299-4EA1-86F9-00BCE6492F3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C454BE70-E299-4EA1-86F9-00BCE6492F3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
