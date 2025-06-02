@@ -48,3 +48,9 @@
     build:
       context: .
       dockerfile: src/ContactsManagement.WebApi.UI/Dockerfile
+
+  contactsmanagement.minimalapi.ui:
+    image: contactsmanagement.minimalapi.ui
+    build:
+      context: .
+      dockerfile: src/ContactsManagement.MinimalApi.UI/Dockerfile
