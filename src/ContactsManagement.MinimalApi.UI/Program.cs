@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices.JavaScript;
+using System.Text;
 using System.Text.Json;
 using ContactsManagement.Core.Domain.RepositoryContracts;
 using ContactsManagement.Core.DTO.Persons;
@@ -7,9 +8,11 @@ using ContactsManagement.Core.ServiceContracts.Persons;
 using ContactsManagement.Core.Services.Persons;
 using ContactsManagement.Infrastructure.Database;
 using ContactsManagement.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -36,12 +39,32 @@ builder.Services.AddScoped<IPersonsUpdaterService , PersonsUpdaterService>();
 builder.Services.AddScoped<ICountriesRepository , CountriesRepository>();
 builder.Services.AddScoped<IPersonsDeleterService , PersonsDeleterService>();
 
+builder.Services.AddAuthentication().AddJwtBearer(
+    options =>
+{
+    var validIssuers = builder.Configuration.GetSection("Authentication:Schemes:Bearer:ValidIssuer").Get<string[]>()!.AsEnumerable();
+    var validAudiences = builder.Configuration.GetSection("Authentication:Schemes:Bearer:ValidAudiences").Get<string[]>()!.AsEnumerable();
+    var signingKey = builder.Configuration["Authentication:Schemes:Bearer:IssuerSigningKey"];
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuers = validIssuers,
+        ValidAudiences = validAudiences,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey!))
+    };
+}
+);
+builder.Services.AddAuthorization();
+builder.Services.AddCors();
 
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 var app = builder.Build();
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -57,7 +80,7 @@ var personsMapGroup = app.MapGroup("persons");
 personsMapGroup.MapGet("", async ([FromServices] IPersonsGetterService personsGetterService) =>
 {
     return Results.Ok(await personsGetterService.GetAllPersons());
-});
+}).RequireAuthorization();
 
 personsMapGroup.MapGet("{personID:guid}", async ( [FromServices]IPersonsGetterService personsGetterService , Guid personId) =>
 {
