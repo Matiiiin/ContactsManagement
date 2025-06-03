@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 using ContactsManagement.Core.Domain.RepositoryContracts;
 using ContactsManagement.Core.DTO.Persons;
@@ -52,7 +54,7 @@ app.UseHttpsRedirection();
 
 var personsMapGroup = app.MapGroup("persons");
 
-personsMapGroup.MapGet("", async ( [FromServices]IPersonsGetterService personsGetterService) =>
+personsMapGroup.MapGet("", async ([FromServices] IPersonsGetterService personsGetterService) =>
 {
     return Results.Ok(await personsGetterService.GetAllPersons());
 });
@@ -94,6 +96,19 @@ personsMapGroup.MapPost("" , async (ILogger<PersonsAdderService> logger ,[FromSe
 
     return Results.CreatedAtRoute("GetPersonByPersonID", new { personID = person.PersonID }, person);
     
+}).AddEndpointFilter( async (context, next) =>
+{
+    //Before executing endpoint
+    var person = context.Arguments.OfType<PersonAddRequest>().FirstOrDefault();
+    if (person == null) return Results.BadRequest("No person provided");
+    var errors = new List<ValidationResult>();
+    var validationContext = new ValidationContext(person!);
+    var isValid = Validator.TryValidateObject(person!, validationContext, errors);
+    if (!isValid) return Results.BadRequest(errors.Select(e => e.ErrorMessage));
+    var result = await next(context);
+    //After executing endpoint
+    context.HttpContext.Response.Headers.Append("My-custom-response-header", "helloooooooooooo");
+    return result;
 });
 
 personsMapGroup.MapPut("{personID:guid}", async ([FromServices]IPersonsGetterService personsGetterService,ILogger<PersonsUpdaterService> logger , PersonUpdateRequest personUpdateRequest , [FromServices] IPersonsUpdaterService personsUpdaterService , Guid personID) =>
@@ -126,6 +141,7 @@ personsMapGroup.MapPut("{personID:guid}", async ([FromServices]IPersonsGetterSer
     }
     return Results.NoContent();
 });
+
 personsMapGroup.MapDelete("{personID:guid}", async ([FromServices]IPersonsDeleterService personsDeleterService,[FromServices]IPersonsGetterService personsGetterService,ILogger<PersonsUpdaterService> logger,Guid personID) =>
 {
     var person = await personsGetterService.GetPersonByPersonID(personID);
