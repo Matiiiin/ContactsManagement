@@ -30,7 +30,6 @@ namespace ContactsManagement.Core.DTO.Persons
 
         [Required(ErrorMessage = "Please provide a {0}")]
         [Display(Name = "CountryID")]
-        [DataType(DataType.Text)]
         [DisplayFormat(ConvertEmptyStringToNull = true)]
         public Guid? CountryID { get; set; }
 

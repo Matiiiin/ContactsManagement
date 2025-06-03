@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -39,33 +40,61 @@ builder.Services.AddScoped<IPersonsUpdaterService , PersonsUpdaterService>();
 builder.Services.AddScoped<ICountriesRepository , CountriesRepository>();
 builder.Services.AddScoped<IPersonsDeleterService , PersonsDeleterService>();
 
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
+builder.Services.AddExceptionHandler(options =>
+{
+    options.ExceptionHandlingPath = "/error";
+});
 builder.Services.AddAuthentication().AddJwtBearer(
     options =>
 {
-    var validIssuers = builder.Configuration.GetSection("Authentication:Schemes:Bearer:ValidIssuer").Get<string[]>()!.AsEnumerable();
-    var validAudiences = builder.Configuration.GetSection("Authentication:Schemes:Bearer:ValidAudiences").Get<string[]>()!.AsEnumerable();
-    var signingKey = builder.Configuration["Authentication:Schemes:Bearer:IssuerSigningKey"];
-
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuers = validIssuers,
-        ValidAudiences = validAudiences,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey!))
+        ValidIssuers = builder.Configuration.GetSection("Authentication:Schemes:Bearer:ValidIssuer").Get<string[]>()!.AsEnumerable(),
+        ValidAudiences = builder.Configuration.GetSection("Authentication:Schemes:Bearer:ValidAudiences").Get<string[]>()!.AsEnumerable(),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Schemes:Bearer:IssuerSigningKey"]!))
     };
 }
 );
 builder.Services.AddAuthorization();
-builder.Services.AddCors();
+// builder.Services.AddCors();
 
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
 {
     options.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
 });
 var app = builder.Build();
-app.UseCors();
+// app.UseExceptionHandler();
+// app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -94,7 +123,7 @@ personsMapGroup.MapGet("{personID:guid}", async ( [FromServices]IPersonsGetterSe
     return Results.Ok(person);
 }).WithName("GetPersonByPersonID");
     
-personsMapGroup.MapPost("" , async (ILogger<PersonsAdderService> logger ,[FromServices]IPersonsAdderService personsAdderService, [FromBody]PersonAddRequest personAddRequest) =>
+personsMapGroup.MapPost("" , async (ILogger<PersonsAdderService> logger ,[FromServices]IPersonsAdderService personsAdderService,[FromBody]PersonAddRequest personAddRequest) =>
 {
     PersonResponse? person;
     try
@@ -188,6 +217,17 @@ personsMapGroup.MapDelete("{personID:guid}", async ([FromServices]IPersonsDelete
         throw;
     }
     return Results.NoContent();
+});
+
+app.MapGet("/error", (HttpContext context) =>
+{
+    var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+    if (exception != null)
+    {
+        return Results.Problem(detail: exception?.Message ?? "An unexpected error occurred.");
+    }
+
+    return Results.Ok("No error occured.");
 });
 app.Run();
 
